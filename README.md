@@ -1,34 +1,10 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Next.JS middlewares
+Since NextJS does not have a middleware system this is a example how to solve it using multiple middlewares.
 
-## Getting Started
+Ther is some rules how middlewares are defined
 
-First, run the development server:
+* The middleware must be a HOF (Higher-order Function), meaning it will accept the handler (api handler or another middleware) as the first argument returning a new handler
+* The returned handler **must** be async and await the handler
+* If you need to pass arguments you can do it like the example _with-validation.js_ that first accepts the argument and then returns the actual middleware HOF
 
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+When all these rules are applied you can either use a single or combine them using the **compose** function exported from _compose.js_. This function simply combines the function from right to left to build a chain of functions that will call each other, or short circuit everything by not invoking the next handler. (See _with-authentication.js_)
